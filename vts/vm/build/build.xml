@@ -172,7 +172,7 @@ to download and install them.
         <echo message="ok"/>
     </target>
 
-    <target name="setup" depends="-check-dep-availability, make-harness, make-tools">
+    <target name="setup" depends="-check-dep-availability">
         <description>
             Sets up the workspace for use.
         </description>
@@ -182,7 +182,9 @@ to download and install them.
                    property="${build.external.deps.file}.exists"/>
         <antcall target="make-build-prop-file"/>
         <antcall target="make-external-deps-file"/>
-        <!-- antcall target="fetch-depends"/ -->
+        <antcall target="fetch-depends"/>
+        <antcall target="make-harness"/>
+        <antcall target="make-tools"/>
     </target>
 
     <target name="make-harness" unless="${vts.harness.jar}.exists">
@@ -221,6 +223,12 @@ to download and install them.
            <param name="component" value="cpptasks"/>
            <param name="path2jar" value="${cpptasks.jar}"/>
         </antcall>
+        <antcall target="-fetch-library">
+           <param name="component" value="junit"/>
+           <param name="path2jar" value="${junit.jar}"/>
+        </antcall>
+        <copy file="${junit.jar}" todir="${root}/../tools"/>
+        <copy file="${xerces.impl.jar}" todir="${root}/../tools"/>
     </target>
 
     <target name="-make-dep-dirs" unless="${depends.jars}.exists">
@@ -252,6 +260,8 @@ to download and install them.
                    property="${ant-contrib.jar}.exists"/>
         <available file="${cpptasks.jar}" type="file"
                    property="${cpptasks.jar}.exists"/>
+        <available file="${junit.jar}" type="file"
+                   property="${junit.jar}.exists"/>
         <condition property="some.ext.dep.unavailable">
             <or>
                 <not><isset property="${jasmin.jar}.exists"/></not>
@@ -259,6 +269,7 @@ to download and install them.
                 <not><isset property="${xerces.impl.jar}.exists"/></not>
                 <not><isset property="${ant-contrib.jar}.exists"/></not>
                 <not><isset property="${cpptasks.jar}.exists"/></not>
+                <not><isset property="${junit.jar}.exists"/></not>
             </or>
         </condition>
     </target>
@@ -494,7 +505,7 @@ directory.
               fork="yes" 
               dir="${vts.build.path}"
               classpath="{vts.built.bin.classes}:${vts.built.bin.lib}:${vts.harness.jar}:${xml.classpath}">
-            <arg line="-cfp ${vts.built.config} -exclude ${vts.built.config}/exclude.file -execopt exec other -execopt location local -execopt concurrent ${th.concurrency.other} -version -property TestResultRoot ${distrib.location}${f}${vts.zip.prefix}_results${f}result.Other -logl ${th.log.level}  -property TestedRuntime ${tested.runtime}"/>
+            <arg line="-cfp ${vts.built.config} -include ${vts.built.config}/include.file -exclude ${vts.built.config}/exclude.file -execopt exec other -execopt location local -execopt concurrent ${th.concurrency.other} -version -property TestResultRoot ${distrib.location}${f}${vts.zip.prefix}_results${f}result.Other -logl ${th.log.level}  -property TestedRuntime ${tested.runtime}"/>
         </java>
 
         <tstamp>

@@ -92,24 +92,33 @@
             <os family="unix"/>
         </and>
     </condition>
+    <condition property="if.mac" value="true">
+        <os family="mac"/>
+    </condition>
     <condition property="pl_efl" value="Windows">
         <istrue value="${if.win}"/>
     </condition>
     <condition property="pl_efl" value="Linux">
         <istrue value="${if.linux}"/>
     </condition>
+    <condition property="pl_efl" value="Mac">
+        <istrue value="${if.mac}"/>
+    </condition>
 
     <!-- Set architecture-->
-    <condition property="if.ia32_EM64T" value="true">
-        <contains string="${os.arch}" substring="x86_64"/>
-    </condition>
+<!--    <condition property="if.ia32_EM64T" value="true">
+        <or>
+            <contains string="${os.arch}" substring="x86_64"/>
+            <contains string="${os.arch}" substring="amd64"/>
+        </or>    
+    </condition> -->
     <condition property="if.ia32" value="true">
-        <and>
+<!--        <and> -->
             <contains string="${os.arch}" substring="86"/>
-            <not>
+<!--            <not>
                 <isset property="if.ia32_EM64T"/>
             </not>
-        </and>
+        </and> -->
     </condition>
     <condition property="if.ipf" value="true">
         <contains string="${os.arch}" substring="ia64"/>
@@ -128,6 +137,12 @@
     </condition>
 
     <target name="make-build-prop-file" unless="${build.properties.file}.exists">
+        <property name="robovm-vts.sh" location="${basedir}/../../../bin/robovm-vts.sh"/>
+        <property name="robovm-vts.bat" location="${basedir}/../../../bin/robovm-vts.bat"/>
+        <condition property="robovm-vts" value="${robovm-vts.bat}" else="${robovm-vts.sh}">
+            <istrue value="${if.win}"/>
+        </condition>
+        <property name="jdk.dir" location="${java.home}/.."/>
         <!-- build configuration file creation -->
         <echo file="${build.properties.file}">
 #
@@ -137,14 +152,15 @@
 # Path to runtime to test
 # example: tested.runtime=C:/JDK1.5/bin/java.exe
 
-tested.runtime=
+tested.runtime=${robovm-vts}
 
 
 # JDK 1.5 home
 # example: java.home.1.5=C:/JDK1.5
 
-java.home.1.5=
+java.home.1.5=${jdk.dir}
 
+th.concurrency.other=1
 
 # Uncomment and set up these properties
 # if you are using a proxy server for internat connection
@@ -171,7 +187,7 @@ depends.dir=depends
 depends.jars=${depends.dir}/jars
 depends.arch=${depends.dir}/arch
 depends.temp=${depends.dir}/temp
-mirror.base=http://mirrors.ibiblio.org/pub/mirrors/maven2
+mirror.base=http://repo1.maven.org/maven2
 
 xerces.impl.jar=${depends.jars}/xercesImpl.jar
 xerces.impl.url=${mirror.base}/xerces/xercesImpl/2.8.0/xercesImpl-2.8.0.jar
@@ -183,18 +199,22 @@ xml.apis.md5=6dee9238dd2900171197104951940778
 
 jasmin.jar=${depends.jars}/jasmin.jar
 jasmin.zip=jasmin-2.2.zip
-jasmin.url=http://heanet.dl.sourceforge.net/sourceforge/jasmin/jasmin-2.2.zip
+jasmin.url=http://heanet.dl.sourceforge.net/project/jasmin/jasmin/jasmin-2.2/jasmin-2.2.zip
 jasmin.md5=c2f4a1df004983850046e1d9eaf724f3
 
 ant-contrib.jar=${depends.jars}/ant-contrib.jar
 ant-contrib.zip=ant-contrib-1.0b2-bin.zip
-ant-contrib.url=http://superb-west.dl.sourceforge.net/sourceforge/ant-contrib/ant-contrib-1.0b2-bin.zip
+ant-contrib.url=http://heanet.dl.sourceforge.net/project/ant-contrib/ant-contrib/ant-contrib-1.0b2/ant-contrib-1.0b2-bin.zip
 ant-contrib.md5=576eafb2aca3e87c26d6d274047de482
 
 cpptasks.jar=${depends.jars}/cpptasks.jar
 cpptasks.zip=cpptasks-1.0b4.zip
-cpptasks.url=http://heanet.dl.sourceforge.net/sourceforge/ant-contrib/cpptasks-1.0b4.zip
+cpptasks.url=http://heanet.dl.sourceforge.net/project/ant-contrib/ant-contrib/cpptasks-1.0-beta4/cpptasks-1.0b4.zip
 cpptasks.md5=118e601b58a48519208efa9893c7c5c0
+
+junit.jar=${depends.jars}/junit.jar
+junit.url=${mirror.base}/junit/junit/4.9/junit-4.9.jar
+junit.md5=93e74f726f80a9645e382530f7895c86
         </echo>
         <echo>
 ========================================

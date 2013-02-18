@@ -17,7 +17,7 @@
   
 #include <jni.h>
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 /*
  * Method: org.apache.harmony.vts.test.vm.jni.NIOSupport.NewDirectByteBufferTest.nativeExecute()Ljava/nio/ByteBuffer;

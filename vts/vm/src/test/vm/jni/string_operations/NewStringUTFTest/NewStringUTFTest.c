@@ -16,7 +16,7 @@
 */
   
 #include <jni.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 /*
  * Method: org.apache.harmony.vts.test.vm.jni.string_operations.NewStringUTFTest.nativeExecute([B)Ljava/lang/String;

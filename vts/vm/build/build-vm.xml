@@ -91,7 +91,7 @@
                 Compile framework and tests.
         </description>
         <javac destdir="${vts.built.bin.classes}" srcdir="${vts.image.src.test}"
-               includes="**/*.java" excludes="**/share/**/*.java **/jvmti/**/*.java">
+               includes="**/*.java" excludes="**/share/**/*.java **/jvmti/**/*.java" excludesfile="${vts.built.config}/compile.exclude.file">
             <depend targetdir="${vts.built.bin.classes}/org/apache/harmony/vts/test">
                 <mapper>
                     <regexpmapper from="^(.*)/([^/]+)(?:/\2|(/.*))\.java$$" 
@@ -137,7 +137,7 @@
                     <format property="start.vm.build" pattern="yyyy-MM-dd hh:mm:ss" />
                 </tstamp>
                 <jasmin dest="${vts.built.bin.classes}" >
-                    <fileset dir="${vts.image.src.test}/vm" casesensitive="yes">
+                    <fileset dir="${vts.image.src.test}/vm" casesensitive="yes" excludesfile="${vts.built.config}/compile.exclude.file">
                         <include name="**/*.j" />
                         <include name="**/*.jj" />
                         <depend targetdir="${vts.built.bin.classes}/org/apache/harmony/vts/test/vm">
@@ -166,7 +166,7 @@
                 <!-- CCODE -->
                 <foreach target="compile-jvm-ccode-test" param="ccodesource" inheritall="true" >
                     <path>
-                        <fileset id="ccodesources" dir="${vts.image.src.test}/vm" casesensitive="yes">
+                        <fileset id="ccodesources" dir="${vts.image.src.test}/vm" casesensitive="yes" excludesfile="${vts.built.config}/compile.exclude.file">
                             <include name="**/*.ccode"/>
                             <depend targetdir="${vts.built.bin.classes}/org/apache/harmony/vts/test/vm">
                                 <mapper>
@@ -174,7 +174,7 @@
                                 </mapper>
                             </depend>
                         </fileset>
-                        <fileset id="ccodehelpers-sources" dir="${vts.image.src.test}/vm" casesensitive="yes">
+                        <fileset id="ccodehelpers-sources" dir="${vts.image.src.test}/vm" casesensitive="yes" excludesfile="${vts.built.config}/compile.exclude.file">
                             <include name="**/*.ccodeh"/>
                             <depend targetdir="${vts.built.bin.classes}/org/apache/harmony/vts/test/vm">
                                 <mapper>
@@ -196,12 +196,12 @@
     </target>
 
     <target name="-do-compile-native" unless="nonative">
-        <subant target="jvmti" inheritall="true">
+<!--        <subant target="jvmti" inheritall="true">
                 <fileset dir="." includes="build/build-native.xml"/>
             <property name="out.lib" value="${vts.built.bin.lib}"/>
             <property name="src.test" value="${vts.image.src.test}"/>
             <property name="java.home" value="${java.home.1.5}"/>
-        </subant>
+        </subant> -->
         <subant target="jni" inheritall="true">
                 <fileset dir="." includes="build/build-native.xml"/>
             <property name="out.lib" value="${vts.built.bin.lib}"/>
