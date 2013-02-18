@@ -137,8 +137,8 @@
     </condition>
 
     <target name="make-build-prop-file" unless="${build.properties.file}.exists">
-        <property name="robovm-vts.sh" location="${basedir}/../../../bin/robovm-vts.sh"/>
-        <property name="robovm-vts.bat" location="${basedir}/../../../bin/robovm-vts.bat"/>
+        <property name="robovm-vts.sh" location="${basedir}/../../../robovm-vts.sh"/>
+        <property name="robovm-vts.bat" location="${basedir}/../../../robovm-vts.bat"/>
         <condition property="robovm-vts" value="${robovm-vts.bat}" else="${robovm-vts.sh}">
             <istrue value="${if.win}"/>
         </condition>

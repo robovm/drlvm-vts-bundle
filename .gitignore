@@ -1,0 +1,9 @@
+tools/VMTT.dest/
+tools/th.dest/
+tools/*.jar
+vts/build.log
+vts/dest/
+vts/vm/build/build.properties
+vts/vm/build/dependencies.properties
+vts/vm/build/hs_err*.log
+vts/vm/depends/
