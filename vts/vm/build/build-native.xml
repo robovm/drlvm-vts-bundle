@@ -69,8 +69,8 @@
 		<property name="compiler.name" value="gcc"/>
 		<property name="cc.option.1" value="-DMACOSX"/>
 		<property name="cc.option.2" value="-DPLATFORM_POSIX"/>
-		<property name="cc.option.3" value="-arch i386"/>
-		<property name="ld.option.1" value="-arch i386"/>
+		<property name="cc.option.3" value="-m32"/>
+		<property name="ld.option.1" value="-m32"/>
 		<!--property name="out.lib" location="${vts.built}/bin/lib/lnx.${os.arch}"/-->
 		<property name="out.lib" location="${vts.built}/bin/lib"/>
 		<mkdir dir="${out.lib}"/>
@@ -109,6 +109,7 @@
                     <compilerarg value="-I${java.include}\win32" if="if.win"/>
                     <compilerarg value="-I${java.include}/linux" if="if.linux"/> 
                     <compilerarg value="-I${java.home}/Headers" if="if.mac"/> 
+                    <compilerarg value="-I${java.include}/darwin" if="if.mac"/> 
                     <compilerarg value="-I${jni.share}"/>
                     <compilerarg value="${cc.option.1}"/>
                     <compilerarg value="${cc.option.2}"/>
