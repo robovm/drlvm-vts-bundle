@@ -69,15 +69,116 @@
 		<property name="compiler.name" value="gcc"/>
 		<property name="cc.option.1" value="-DMACOSX"/>
 		<property name="cc.option.2" value="-DPLATFORM_POSIX"/>
-		<property name="cc.option.3" value="-m32"/>
-		<property name="ld.option.1" value="-m32"/>
 		<!--property name="out.lib" location="${vts.built}/bin/lib/lnx.${os.arch}"/-->
 		<property name="out.lib" location="${vts.built}/bin/lib"/>
 		<mkdir dir="${out.lib}"/>
 		<property name="tmp.dir" location="${out.lib}/tmp"/>
 	</target>
 
-	<target name="-mk.jni" depends="win.init,lnx.init,mac.init"  description="compile jnitests library">
+    <target name="-mk.jni.darwin" depends="mac.init" if="if.mac" description="compile jnitests library for darwin based OSes (Mac OS X, iOS)">
+        <property name="jni.library.name" value="jnitests"/>
+        <mkdir dir="${tmp.dir}"/>
+        <mkdir dir="${tmp.dir}/macosx/x86_64"/>
+        <mkdir dir="${tmp.dir}/macosx/i386"/>
+        <mkdir dir="${tmp.dir}/ios/armv7"/>
+        <mkdir dir="${tmp.dir}/ios/arm64"/>
+
+        <fileset id="-mk.jni.sources" dir="${jni.dir}" 
+                includes="**/*.c, **/*.cpp" 
+                excludes="**/jvmti/**/*.c **/jvmti/**/*.cpp" />
+        <pathconvert property="sourcefiles" pathsep=" " refid="-mk.jni.sources"/>
+
+        <exec executable="xcrun" outputproperty="cc"><arg line="-f clang"/></exec>
+        <exec executable="xcode-select" outputproperty="xcodepath"><arg line="-p"/></exec>
+        <echo message="Using cc: ${cc}"/>
+        <echo message="Xcode found in: ${xcodepath}"/>
+
+        <if>
+            <not><available file="${out.lib}/${pref}${jni.library.name}${ext}"/></not>
+            <then>
+                <echo message="Compiling x86_64 shared lib..."/>
+                <exec executable="${cc}">
+                    <arg line="-o ${tmp.dir}/macosx/x86_64/${jni.library.name}${ext}"/>
+                    <arg line="-arch x86_64"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"/>
+                    <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
+                    <arg value="-g"/>
+                    <arg value="-shared"/>
+                    <arg line="${sourcefiles}"/>
+                </exec>
+
+                <echo message="Compiling i386 shared lib..."/>
+                <exec executable="${cc}">
+                    <arg line="-o ${tmp.dir}/macosx/i386/${jni.library.name}${ext}"/>
+                    <arg line="-arch i386"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"/>
+                    <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
+                    <arg value="-g"/>
+                    <arg value="-shared"/>
+                    <arg line="${sourcefiles}"/>
+                </exec>
+
+                <echo message="Creating fat shared lib for x86_64/x86 using lipo..."/>
+                <exec executable="lipo">
+                    <arg value="-create"/>
+                    <arg line="-arch x86_64 ${tmp.dir}/macosx/x86_64/${jni.library.name}${ext}"/>
+                    <arg line="-arch i386 ${tmp.dir}/macosx/i386/${jni.library.name}${ext}"/>
+                    <arg line="-arch armv7 ${tmp.dir}/ios/armv7/${jni.library.name}${ext}"/>
+                    <arg line="-arch arm64 ${tmp.dir}/ios/arm64/${jni.library.name}${ext}"/>
+                    <arg line="-output ${out.lib}/${pref}${jni.library.name}${ext}"/>
+                </exec>
+
+                <echo message="Done!"/>
+            </then>
+        </if>
+        <if>
+            <not><available file="${out.lib}/${pref}${jni.library.name}.a"/></not>
+            <then>
+
+                <echo message="Compiling armv7 static lib..."/>
+                <exec executable="${cc}" dir="${tmp.dir}/ios/armv7">
+                    <arg value="-c"/>
+                    <arg line="-arch armv7"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk"/>
+                    <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
+                    <arg value="-g"/>
+                    <arg line="${sourcefiles}"/>
+                </exec>
+                <fileset id="-armv7.objects" dir="${tmp.dir}/ios/armv7" includes="*.o"/>
+                <pathconvert property="armv7.objects" pathsep=" " refid="-armv7.objects"/>
+                <exec executable="ar">
+                    <arg line="rcs ${tmp.dir}/ios/armv7/${jni.library.name}.a ${armv7.objects}"/>
+                </exec>
+
+                <echo message="Compiling arm64 shared lib..."/>
+                <exec executable="${cc}" dir="${tmp.dir}/ios/arm64">
+                    <arg value="-c"/>
+                    <arg line="-arch arm64"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk"/>
+                    <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
+                    <arg value="-g"/>
+                    <arg line="${sourcefiles}"/>
+                </exec>
+                <fileset id="-arm64.objects" dir="${tmp.dir}/ios/arm64" includes="*.o"/>
+                <pathconvert property="arm64.objects" pathsep=" " refid="-arm64.objects"/>
+                <exec executable="ar">
+                    <arg line="rcs ${tmp.dir}/ios/arm64/${jni.library.name}.a ${arm64.objects}"/>
+                </exec>
+
+                <echo message="Creating fat static lib for armv7/arm64 using lipo..."/>
+                <exec executable="lipo">
+                    <arg value="-create"/>
+                    <arg line="-arch armv7 ${tmp.dir}/ios/armv7/${jni.library.name}.a"/>
+                    <arg line="-arch arm64 ${tmp.dir}/ios/arm64/${jni.library.name}.a"/>
+                    <arg line="-output ${out.lib}/${pref}${jni.library.name}.a"/>
+                </exec>
+
+                <echo message="Done!"/>
+            </then>
+        </if>
+    </target>
+
+	<target name="-mk.jni" depends="win.init,lnx.init" unless="if.mac" description="compile jnitests library (Windows, Linux)">
 
 		<property name="jni.library.name" value="jnitests"/>
 		<mkdir dir="${tmp.dir}"/>
@@ -125,7 +226,7 @@
         </if>
 	</target>
 
-	<target name="jni" depends="-mk.jni"  description="build library for jni tests">
+	<target name="jni" depends="-mk.jni,-mk.jni.darwin"  description="build library for jni tests">
 
 		<echo message="Build library(ies) for jni tests finished ..."/>
 
