@@ -140,6 +140,7 @@
                     <arg value="-c"/>
                     <arg line="-arch armv7"/>
                     <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"/>
+                    <arg line="-miphoneos-version-min=8.0"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg line="${sourcefiles}"/>
@@ -155,6 +156,7 @@
                     <arg value="-c"/>
                     <arg line="-arch arm64"/>
                     <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"/>
+                    <arg line="-miphoneos-version-min=8.0"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg line="${sourcefiles}"/>
