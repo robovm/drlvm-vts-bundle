@@ -7,3 +7,6 @@ vts/vm/build/build.properties
 vts/vm/build/dependencies.properties
 vts/vm/build/hs_err*.log
 vts/vm/depends/
+.classpath
+.project
+tools/bin/
