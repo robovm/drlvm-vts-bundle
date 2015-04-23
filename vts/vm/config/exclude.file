@@ -65,6 +65,17 @@ vm/jvms/classLLI/loading/loading11/loading1103/loading1103.xml
 // Uses Thread.stop() which throws UnsuppportedOperationException in RoboVM and Android
 vm/jvms/instructions/sync/monitorenter/monitorenter01/monitorenter0101/monitorenter0101.xml
 
+// RoboVM doesn't support the JNI DefineClass function.
+vm/jni/class_operations/DefineClassTest/DefineClassTest.xml
+
+// RoboVM only supports RegisterNatives in dynamic JNI mode and UnregisterNative is not supported
+vm/jni/register_natives/RegisterNativesTest/RegisterNativesTest.xml
+
+// Uses weak global references which we don't implement properly ATM (they
+// will be strong). Also makes assumptions on how the GC works and that a single
+// call to System.gc() will clear weak global references used by the test.
+vm/jni/references/DeleteLocalRefTest/DeleteLocalRefTest.xml
+
 // Tests limitations
 
 // Tests not compiled (match patterns in compile.exclude.file)
