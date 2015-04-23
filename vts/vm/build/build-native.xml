@@ -100,7 +100,7 @@
                 <exec executable="${cc}">
                     <arg line="-o ${tmp.dir}/macosx/x86_64/${jni.library.name}${ext}"/>
                     <arg line="-arch x86_64"/>
-                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg value="-shared"/>
@@ -111,7 +111,7 @@
                 <exec executable="${cc}">
                     <arg line="-o ${tmp.dir}/macosx/i386/${jni.library.name}${ext}"/>
                     <arg line="-arch i386"/>
-                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg value="-shared"/>
@@ -139,7 +139,7 @@
                 <exec executable="${cc}" dir="${tmp.dir}/ios/armv7">
                     <arg value="-c"/>
                     <arg line="-arch armv7"/>
-                    <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg line="${sourcefiles}"/>
@@ -154,7 +154,7 @@
                 <exec executable="${cc}" dir="${tmp.dir}/ios/arm64">
                     <arg value="-c"/>
                     <arg line="-arch arm64"/>
-                    <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg line="${sourcefiles}"/>
