@@ -123,8 +123,6 @@
                     <arg value="-create"/>
                     <arg line="-arch x86_64 ${tmp.dir}/macosx/x86_64/${jni.library.name}${ext}"/>
                     <arg line="-arch i386 ${tmp.dir}/macosx/i386/${jni.library.name}${ext}"/>
-                    <arg line="-arch armv7 ${tmp.dir}/ios/armv7/${jni.library.name}${ext}"/>
-                    <arg line="-arch arm64 ${tmp.dir}/ios/arm64/${jni.library.name}${ext}"/>
                     <arg line="-output ${out.lib}/${pref}${jni.library.name}${ext}"/>
                 </exec>
 
@@ -151,7 +149,7 @@
                     <arg line="rcs ${tmp.dir}/ios/armv7/${jni.library.name}.a ${armv7.objects}"/>
                 </exec>
 
-                <echo message="Compiling arm64 shared lib..."/>
+                <echo message="Compiling arm64 static lib..."/>
                 <exec executable="${cc}" dir="${tmp.dir}/ios/arm64">
                     <arg value="-c"/>
                     <arg line="-arch arm64"/>
