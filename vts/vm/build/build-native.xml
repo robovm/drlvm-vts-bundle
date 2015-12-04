@@ -100,7 +100,7 @@
                 <exec executable="${cc}">
                     <arg line="-o ${tmp.dir}/macosx/x86_64/${jni.library.name}${ext}"/>
                     <arg line="-arch x86_64"/>
-                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg value="-shared"/>
@@ -111,7 +111,7 @@
                 <exec executable="${cc}">
                     <arg line="-o ${tmp.dir}/macosx/i386/${jni.library.name}${ext}"/>
                     <arg line="-arch i386"/>
-                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk"/>
+                    <arg line="-isysroot ${xcodepath}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"/>
                     <arg line="-I${java.include} -I${java.home}/Headers -I${java.include}/darwin -I${jni.share}"/>
                     <arg value="-g"/>
                     <arg value="-shared"/>
